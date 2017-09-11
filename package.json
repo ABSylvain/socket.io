@@ -1,0 +1,24 @@
+{
+    "name": "soso",
+    "version": "1.0.0",
+    "description": "",
+    "main": "app.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/ABSylvain/socket.io.git"
+    },
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/ABSylvain/socket.io/issues"
+    },
+    "homepage": "https://github.com/ABSylvain/socket.io#readme",
+    "dependencies": {
+        "express": "^4.15.4",
+        "http": "0.0.0",
+        "socket.io": "^2.0.3"
+    }
+}
