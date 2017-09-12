@@ -23,23 +23,23 @@ var connection = mysql.createConnection({
     password: 'root',
     database: 'chat'
 });
-
-connection.connect();
-
-io.on('connection', function(socket) {
-
-    socket.on('mess', function(message) {
-        connection.query('INSERT INTO message(message, pseudo) VALUES (:message,:pseudo)',
-            connection.bindParam(message, ':message'),
-            connectionbindParam(pseudo, ':pseudo'),
-            function(error, results, fields) {
-                if (error) throw error;
-            });
-    });
-
-    socket.on('disconnect', function() {
-        io.emit('user disconnected');
-    });
-
+connection.connect(function(err) {
+    if (err) throw err;
+    console.log("Connected!");
 });
 connection.end();
+
+
+io.on('connection', function(socket) {
+    console.log('a user connected');
+
+    socket.on('chat message', function(msg) {
+        console.log('message: ' + msg);
+    });
+    socket.on('chat message', function(msg) {
+        io.emit('chat message', msg);
+    });
+    socket.on('disconnect', function() {
+        console.log('user disconnected');
+    });
+});
