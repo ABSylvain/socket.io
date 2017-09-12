@@ -19,6 +19,7 @@
     "dependencies": {
         "express": "^4.15.4",
         "http": "0.0.0",
+        "mysql": "^2.14.1",
         "socket.io": "^2.0.3"
     }
 }

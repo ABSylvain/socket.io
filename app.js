@@ -1,7 +1,9 @@
 var app = require('express')();
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
+var mysql = require('mysql');
 let port = 9000;
+
 server.listen(port, function(err) {
     if (err) {
         console.log('Fail start server : ' + err);
@@ -13,11 +15,27 @@ app.get('/', function(req, res) {
     res.sendFile(__dirname + '/public/index.html');
 });
 
-io.on('connection', function(socket) {
-    io.emit('co', 'Connection ok');
+var connection = mysql.createConnection({
+    host: 'localhost',
+    port: '8888',
+    user: 'root',
+    password: 'root',
+    database: 'chat'
+});
 
-    socket.on('mess', function(from, msg) {
-        console.log('I received a private message by ' + from + msg);
+connection.connect();
+
+connection.query('SELECT ', function(error, results, fields) {
+    if (error) throw error;
+
+});
+
+connection.end();
+
+io.on('connection', function(socket) {
+
+    socket.on('mess', function(from) {
+
     });
 
     socket.on('disconnect', function() {

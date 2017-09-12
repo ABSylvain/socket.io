@@ -23,12 +23,7 @@
         btn.addEventListener("click", function(e) {
             e.preventDefault();
             message = document.querySelector('#iptMessage').value;
-            socket.on('co', function(str) {
-                console.log(str);
-            });
-            socket.on('mess', function(message) {
-                io.emit(message);
-            })
+            socket.emit('mess', message);
         });
     </script>
 </body>
