@@ -3,31 +3,41 @@ var server = require('http').Server(app);
 var io = require('socket.io')(server);
 var mysql = require('mysql');
 let pseudo = 'boby';
-let port = 9000;
+let portSer = 9000;
 
-server.listen(port, function(err) {
-    if (err) {
-        console.log('Fail start server : ' + err);
-    }
-    console.log('Server start on : ' + port);
+let connection = mysql.createConnection({
+    host: 'localhost',
+    port: '8889',
+    user: 'root',
+    password: 'root',
+    database: 'chat'
 });
 
 app.get('/', function(req, res) {
     res.sendFile(__dirname + '/public/index.html');
 });
 
-var connection = mysql.createConnection({
-    host: 'localhost',
-    port: '8888',
-    user: 'root',
-    password: 'root',
-    database: 'chat'
+function sql() {
+    connection.connect(function(err) {
+        if (err) throw err;
+        console.log("Connected!");
+    });
+    connection.query('SELECT * FROM message', function(err, rows, fields) {
+        if (err)
+            console.log('Error while performing Query,' + err);
+        else
+            console.log('The solution is: ', rows);
+    });
+}
+sql();
+
+
+server.listen(portSer, function(err) {
+    if (err) {
+        console.log('Fail start server : ' + err);
+    }
+    console.log('Server start on : ' + portSer);
 });
-connection.connect(function(err) {
-    if (err) throw err;
-    console.log("Connected!");
-});
-connection.end();
 
 
 io.on('connection', function(socket) {
