@@ -12,17 +12,17 @@ let connection = mysql.createConnection({
     database: 'chat'
 });
 
+connection.connect(function(err) {
+    if (err) throw err
+});
+
 app.get('/', function(req, res) {
     res.sendFile(__dirname + '/public/index.html');
 });
 
-connection.connect(function(err) {
-    if (err) throw err;
-});
-
 function sendToSql(arg) {
     let sql = "INSERT INTO message(pseudo, message) VALUES (?, ?)";
-    let inserts = ['blopi', arg];
+    let inserts = [arg.mess, arg.pseudo];
     sql = mysql.format(sql, inserts);
     connection.query(sql, function(err, rows, fields) {
         if (err) throw err
@@ -47,9 +47,9 @@ server.listen(portSer, function(err) {
 
 io.on('connection', function(socket) {
     console.log('a user connected');
-    // create connection to mysql
 
     socket.on('chat message', function(msg) {
+        console.log(msg);
         sendToSql(msg);
         io.emit('chat message', msg);
     });
