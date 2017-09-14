@@ -16,28 +16,20 @@ app.get('/', function(req, res) {
     res.sendFile(__dirname + '/public/index.html');
 });
 
+connection.connect(function(err) {
+    if (err) throw err;
+});
+
 function sendToSql(arg) {
-    connection.connect(function(err) {
-        if (err) throw err;
-        console.log("Connected!");
-    });
-    console.log(arg);
-    var sql = "INSERT INTO message(pseudo, message) VALUES (?, ?)";
-    var inserts = ['blopi', arg];
+    let sql = "INSERT INTO message(pseudo, message) VALUES (?, ?)";
+    let inserts = ['blopi', arg];
     sql = mysql.format(sql, inserts);
     connection.query(sql, function(err, rows, fields) {
-        if (err)
-            console.log('Error while performing Query,' + err);
-        else
-            console.log('The solution is: ', rows);
+        if (err) throw err
     })
 };
 
 function req() {
-    connection.connect(function(err) {
-        if (err) throw err;
-        console.log("Connected!");
-    });
     connection.query('SELECT * FROM message', function(err, rows, fields) {
         if (err)
             console.log('Error while performing Query,' + err);
@@ -55,6 +47,7 @@ server.listen(portSer, function(err) {
 
 io.on('connection', function(socket) {
     console.log('a user connected');
+    // create connection to mysql
 
     socket.on('chat message', function(msg) {
         sendToSql(msg);
@@ -63,5 +56,6 @@ io.on('connection', function(socket) {
 
     socket.on('disconnect', function() {
         console.log('user disconnected');
+        // deconnect from sql
     });
 });

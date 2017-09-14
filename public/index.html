@@ -63,16 +63,28 @@
     </form>
     <script src="/socket.io/socket.io.js"></script>
     <script>
-        function vider() {
-            document.getElementById('montexte').value = '';
+        let pseudo = "";
+
+        function getPseudo() {
+            pseudo = prompt('Entrez un pseudo');
+            if (pseudo === "") {
+                getPseudo();
+            }
+        }
+        if (pseudo == "") {
+            getPseudo();
         }
         $(function() {
             var socket = io();
             $('form').submit(function() {
                 let message = document.querySelector('#m').value;
-                document.getElementById('m').value = '';
-                socket.emit('chat message', message);
-                return false;
+                if (message != "") {
+                    document.getElementById('m').value = '';
+                    socket.emit('chat message', message);
+                    return false;
+                } else {
+                    alert('No message to send.');
+                }
             });
             socket.on('chat message', function(msg) {
                 $('#messages').append($('<li>').text(msg));
