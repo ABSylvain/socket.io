@@ -21,20 +21,21 @@ app.get('/', function(req, res) {
 });
 
 function sendToSql(arg) {
-    let sql = "INSERT INTO message(pseudo, message) VALUES (?, ?)";
+    let sql = "INSERT INTO message(pseudo, message, instant) VALUES (?, ?, ?)";
     let inserts = [arg.mess, arg.pseudo];
+    console.log(getDate('Y-m-d H:i:s'));
     sql = mysql.format(sql, inserts);
     connection.query(sql, function(err, rows, fields) {
         if (err) throw err
     })
 };
 
-function req() {
+function req(io) {
     connection.query('SELECT * FROM message', function(err, rows, fields) {
         if (err)
             console.log('Error while performing Query,' + err);
         else
-            console.log(rows);
+            io.emit('dbmess', rows);
     })
 };
 
@@ -47,6 +48,7 @@ server.listen(portSer, function(err) {
 
 io.on('connection', function(socket) {
     console.log('a user connected');
+    req(io);
 
     socket.on('chat message', function(msg) {
         console.log(msg);

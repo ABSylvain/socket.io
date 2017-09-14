@@ -42,6 +42,7 @@
         #messages {
             list-style-type: none;
             margin: 0;
+            margin-bottom: 3.1em;
             padding: 0;
         }
         
@@ -90,10 +91,14 @@
                 }
             });
             socket.on('chat message', function(msg) {
-                $('#messages').append($('<li>').text(msg.pseudo + " " + msg.mess));
+                $('#messages').append($('<li>').text(msg.pseudo + " : " + msg.mess));
+                document.body.scrollTop = document.body.scrollHeight;
             });
             socket.on('dbmess', function(arg) {
-                $('#messages').append($('<li>').text(arg));
+                for (let mess of arg) {
+                    $('#messages').append($('<li>').text(mess.pseudo + " " + mess.message));
+                    document.body.scrollTop = document.body.scrollHeight;
+                }
             });
         });
     </script>
