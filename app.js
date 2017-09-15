@@ -2,6 +2,7 @@ var app = require('express')();
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
 var mysql = require('mysql');
+var dateFormat = require('dateformat');
 let pseudo = 'boby';
 let portSer = 9000;
 let connection = mysql.createConnection({
@@ -21,9 +22,10 @@ app.get('/', function(req, res) {
 });
 
 function sendToSql(arg) {
+    var now = new Date();
+    let today = dateFormat(now, "isoDateTime");
     let sql = "INSERT INTO message(pseudo, message, instant) VALUES (?, ?, ?)";
-    let inserts = [arg.mess, arg.pseudo];
-    console.log(getDate('Y-m-d H:i:s'));
+    let inserts = [arg.mess, arg.pseudo, today];
     sql = mysql.format(sql, inserts);
     connection.query(sql, function(err, rows, fields) {
         if (err) throw err
