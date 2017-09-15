@@ -4,7 +4,7 @@ var io = require('socket.io')(server);
 var mysql = require('mysql');
 var dateFormat = require('dateformat');
 let pseudo = 'boby';
-let portSer = 9000;
+let portSer = 3017;
 let connection = mysql.createConnection({
     host: 'localhost',
     port: '8889',
